@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employee Manager</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f0e7;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #3b3b3b;
+      font-size: 2.4em;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background-color: #ffffff;
+      max-width: 550px;
+      margin: 0 auto 30px;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #5c5c5c;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-add {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .btn-add:hover {
+      background-color: #388e3c;
+    }
+
+    .btn-reset {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .btn-reset:hover {
+      background-color: #d32f2f;
+    }
+
+    .message {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    .message.success {
+      color: #2e7d32;
+    }
+
+    .message.error {
+      color: #c62828;
+    }
+
+    table {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+    }
+
+    th {
+      text-align: left;
+      background-color: #f2e9dc;
+      color: #333;
+      padding: 12px;
+      border-radius: 8px 8px 0 0;
+    }
+
+    td {
+      background-color: #ffffff;
+      padding: 12px;
+      text-align: left;
+      border-radius: 0 0 8px 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .btn-delete {
+      background-color: #ff7043;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-delete:hover {
+      background-color: #e64a19;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Employee</h1>
+
+  <div class="card">
+    <div class="message" id="messageBox"></div>
+    <div class="form-group">
+      <label for="empId">Employee ID</label>
+      <input type="text" id="empId" />
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" />
+    </div>
+    <div class="form-group">
+      <label for="position">Position</label>
+      <input type="text" id="position" />
+    </div>
+    <div class="form-group">
+      <label for="office">Office</label>
+      <input type="text" id="office" />
+    </div>
+    <div class="btn-container">
+      <button class="btn btn-add" onclick="addEmployee()">Add Employee</button>
+      <button class="btn btn-reset" onclick="resetTable()">Clear All</button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Employee ID</th>
+        <th>Last Name</th>
+        <th>Position</th>
+        <th>Office</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody id="employeeTable">
+      <!-- Dynamic rows go here -->
+    </tbody>
+  </table>
+
+  <script>
+    const maxRows = 15;
+
+    function showMessage(text, type = 'success') {
+      const msg = document.getElementById('messageBox');
+      msg.textContent = text;
+      msg.className = `message ${type}`;
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    }
+
+    function addEmployee() {
+      const id = document.getElementById("empId").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const position = document.getElementById("position").value.trim();
+      const office = document.getElementById("office").value.trim();
+      const table = document.getElementById("employeeTable");
+
+      if (!id || !lastName || !position || !office) {
+        showMessage("All fields are required!", "error");
+        return;
+      }
+
+      if (table.rows.length >= maxRows) {
+        showMessage("Limit of 15 employees reached.", "error");
+        return;
+      }
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${id}</td>
+        <td>${lastName}</td>
+        <td>${position}</td>
+        <td>${office}</td>
+        <td><button class="btn-delete" onclick="deleteRow(this)">Delete</button></td>
+      `;
+      table.appendChild(row);
+
+      // Clear form
+      document.getElementById("empId").value = "";
+      document.getElementById("lastName").value = "";
+      document.getElementById("position").value = "";
+      document.getElementById("office").value = "";
+
+      showMessage("Employee successfully added.", "success");
+    }
+
+    function deleteRow(btn) {
+      const row = btn.closest("tr");
+      row.remove();
+      showMessage("Employee removed.", "success");
+    }
+
+    function resetTable() {
+      document.getElementById("employeeTable").innerHTML = "";
+      showMessage("All employee entries have been cleared.", "success");
+    }
+  </script>
+
+</body>
+</html>

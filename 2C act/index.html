@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Colorful Login</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom right, #ffe0e9, #d4fcf9);
+      min-height: 100vh;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin: 40px 0 30px;
+      color: #3c3c3c;
+      text-shadow: 1px 1px 0 #fff;
+    }
+
+    form {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .input-strip {
+      padding: 20px 30px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .strip-1 {
+      background-color: #ffe4b3; /* soft orange */
+    }
+
+    .strip-2 {
+      background-color: #d1c4e9; /* lavender */
+    }
+
+    .strip-3 {
+      background-color: #c8e6c9; /* pale green */
+    }
+
+    .input-strip label {
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    .input-strip input {
+      padding: 10px;
+      border: 2px solid #999;
+      border-radius: 5px;
+      font-size: 15px;
+      background-color: #fff;
+    }
+
+    .input-strip input:focus {
+      border-color: #555;
+      outline: none;
+    }
+
+    .login-button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      border: none;
+      border-radius: 0;
+      background: linear-gradient(90deg, #2193b0, #6dd5ed);
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .login-button:hover {
+      background: linear-gradient(90deg, #1976d2, #4dd0e1);
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Access Panel</h2>
+
+  <form>
+    <div class="input-strip strip-1">
+      <label for="user">Username</label>
+      <input type="text" id="user" placeholder="Enter your username">
+    </div>
+
+    <div class="input-strip strip-2">
+      <label for="pass">Password</label>
+      <input type="password" id="pass" placeholder="Enter your password">
+    </div>
+
+    <div class="input-strip strip-3">
+      <label>&nbsp;</label>
+      <button type="submit" class="login-button">Log In</button>
+    </div>
+  </form>
+
+</body>
+</html>

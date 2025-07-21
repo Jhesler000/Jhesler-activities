@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Team Dashboard</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: linear-gradient(120deg, #d0f0f6, #e8fdd8);
+      margin: 0;
+      padding: 40px 15px;
+      color: #1e3d3d;
+    }
+
+    h1 {
+      text-align: center;
+      color: #245c5c;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+
+    .main-box {
+      max-width: 550px;
+      margin: auto;
+      background: rgba(240, 255, 255, 0.6);
+      border-radius: 20px;
+      padding: 30px 25px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(8px);
+    }
+
+    .input-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .input-section input {
+      padding: 12px;
+      border: 1px solid #a5d7cc;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      font-size: 15px;
+      color: #2e4d4d;
+    }
+
+    .input-section input::placeholder {
+      color: #88b1b1;
+    }
+
+    .input-section button {
+      background-color: #2f8c82;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .input-section button:hover {
+      background-color: #236a63;
+    }
+
+    .member-card {
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      color: #244141;
+    }
+
+    .member-card p {
+      margin: 6px 0;
+    }
+
+    .remove-btn {
+      margin-top: 10px;
+      background-color: #cc4444;
+      color: white;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .remove-btn:hover {
+      background-color: #992d2d;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>employee info</h1>
+
+  <div class="main-box">
+    <div class="input-section">
+      <input type="text" id="teamID" placeholder="Team ID" />
+      <input type="text" id="surname" placeholder="Surname" />
+      <input type="text" id="role" placeholder="Role" />
+      <input type="text" id="location" placeholder="Location" />
+      <button onclick="saveMember()">Add to Team</button>
+    </div>
+
+    <div id="rosterDisplay">
+      <!-- Member cards will appear here -->
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", displayRoster);
+
+    function saveMember() {
+      const id = document.getElementById("teamID").value.trim();
+      const surname = document.getElementById("surname").value.trim();
+      const role = document.getElementById("role").value.trim();
+      const location = document.getElementById("location").value.trim();
+
+      if (!id || !surname || !role || !location) {
+        alert("All fields are required.");
+        return;
+      }
+
+      const newEntry = { id, surname, role, location };
+      const team = JSON.parse(localStorage.getItem("uniqueTeamData")) || [];
+      team.push(newEntry);
+      localStorage.setItem("uniqueTeamData", JSON.stringify(team));
+
+      resetForm();
+      displayRoster();
+    }
+
+    function displayRoster() {
+      const team = JSON.parse(localStorage.getItem("uniqueTeamData")) || [];
+      const list = document.getElementById("rosterDisplay");
+      list.innerHTML = "";
+
+      team.forEach((member, i) => {
+        const box = document.createElement("div");
+        box.className = "member-card";
+        box.innerHTML = `
+          <p><strong>Team ID:</strong> ${member.id}</p>
+          <p><strong>Surname:</strong> ${member.surname}</p>
+          <p><strong>Role:</strong> ${member.role}</p>
+          <p><strong>Location:</strong> ${member.location}</p>
+          <button class="remove-btn" onclick="removeMember(${i})">Remove</button>
+        `;
+        list.appendChild(box);
+      });
+    }
+
+    function removeMember(index) {
+      const team = JSON.parse(localStorage.getItem("uniqueTeamData")) || [];
+      team.splice(index, 1);
+      localStorage.setItem("uniqueTeamData", JSON.stringify(team));
+      displayRoster();
+    }
+
+    function resetForm() {
+      document.getElementById("teamID").value = "";
+      document.getElementById("surname").value = "";
+      document.getElementById("role").value = "";
+      document.getElementById("location").value = "";
+    }
+  </script>
+
+</body>
+</html>
